@@ -1,0 +1,33 @@
+{
+	"name": "track-my-quotes",
+	"version": "0.0.1",
+	"description": "Test to get stocks values",
+	"main": "index.js",
+	"scripts": {
+		"test": "tape test | tap-colorize"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/partageit/vegetables"
+	},
+	"bugs": {
+		"url": "https://github.com/partageit/vegetables/issues"
+	},
+	"homepage": "https://partageit.github.io/vegetables",
+	"keywords": [],
+	"bin": {
+		"track-my-quotes": "./index.js"
+	},
+	"preferGlobal": true,
+	"author": "David Duquenoy",
+	"license": "MIT",
+	"readmeFilename": "README.md",
+	"dependencies": {
+		"yahoo-finance": "0.2.*",
+		"csv-to-json": "0.1.*"
+	},
+	"devDependencies": {
+		"tap-colorize": "^1.2.0",
+		"tape": "^2.13.4"
+	}
+}
