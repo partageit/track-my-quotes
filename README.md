@@ -80,3 +80,4 @@ Variation since 30 days: 1.943
 - Send output as mail
 - configuration: money unit
 - gain per year (or day?)
+- option to sort output by variation since purchase date

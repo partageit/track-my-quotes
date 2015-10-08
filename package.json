@@ -1,6 +1,6 @@
 {
 	"name": "track-my-quotes",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "Track stocks values according to purchase price",
 	"main": "index.js",
 	"scripts": {
@@ -14,7 +14,7 @@
 		"url": "https://github.com/partageit/track-my-quotes/issues"
 	},
 	"homepage": "https://github.com/partageit/track-my-quotes",
-	"keywords": [],
+	"keywords": [ "quotes", "stocks", "finance" ],
 	"bin": {
 		"track-my-quotes": "./index.js"
 	},
