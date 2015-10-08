@@ -1,19 +1,19 @@
 {
 	"name": "track-my-quotes",
 	"version": "0.0.1",
-	"description": "Test to get stocks values",
+	"description": "Track stocks values according to purchase price",
 	"main": "index.js",
 	"scripts": {
 		"test": "tape test | tap-colorize"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/partageit/vegetables"
+		"url": "https://github.com/partageit/track-my-quotes"
 	},
 	"bugs": {
-		"url": "https://github.com/partageit/vegetables/issues"
+		"url": "https://github.com/partageit/track-my-quotes/issues"
 	},
-	"homepage": "https://partageit.github.io/vegetables",
+	"homepage": "https://partageit.github.io/track-my-quotes",
 	"keywords": [],
 	"bin": {
 		"track-my-quotes": "./index.js"
@@ -24,7 +24,9 @@
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"yahoo-finance": "0.2.*",
-		"csv-to-json": "0.1.*"
+		"csv-to-json": "0.1.*",
+		"yargs": "~3.0.4",
+		"colors": "~1.0.3"
 	},
 	"devDependencies": {
 		"tap-colorize": "^1.2.0",

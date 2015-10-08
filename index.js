@@ -1,15 +1,45 @@
+#!/usr/bin/env node
 'use strict';
+var pkg = require('./package');
+var logger = require('./lib/logger');
 
-var yahooFinance = require('yahoo-finance');
-var csvToJson = require('csv-to-json');
+var yargs = require('yargs')
+.usage(pkg.name + ' [options] <command>')  // pkg.name may be replaced with '$0'
+.example(pkg.name + ' my-stocks.csv', 'Output results')
+.example(pkg.name + ' my-stocks.csv -o today.txt', 'Output results in today.txt')
+.epilog(pkg.name + ' v' + pkg.version + ' - For more informations, check out our site: https://partageit.github.io/vegetables')
+.alias({
+	'o': 'output',
+	'f': 'format',
+	'h': 'help',
+	'v': 'verbose'
+})
+.describe({
+	'output': 'A file in which write the result. By default, it is displayed.',
+	'format': 'The result format',
+	'help': 'This screen',
+	'version': 'Display the... version',
+	'verbose': 'Enable verbose mode',
+	'silent': 'Disable every outputs',
+})
+.boolean('version')
+.boolean('help')
+.boolean('silent')
+.count('verbose')
+.string('_')
+.default(//{
+	//'config': '' // should not begin with .
+	//}
+);
+var argv = yargs.argv;
+logger.init(argv.silent ? -1 : argv.verbose);
 
-yahooFinance.historical({
-  symbol: 'AAPL',
-  from: '2015-10-04',
-  to: '2015-12-31',
-  // period: 'd'  // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only) 
-}, function (err, quotes) {
-  console.log('yahoo', err, quotes);
-});
-
-csvToJson.parse({filename: 'test.csv'}, function(error, json) {console.log('done:', json); });
+if (argv.version) {
+	console.log(pkg.name + ' v' + pkg.version);
+} else if (argv.h) {
+	console.log(yargs.help());
+} else if (argv._[0]) {
+	require('./lib/track')(argv);
+} else {
+	console.log(yargs.help());
+}
