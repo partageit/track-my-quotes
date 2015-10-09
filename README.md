@@ -18,6 +18,12 @@ However, it's not easy to keep in mind purchase prices and to calculate gains.
 
 Track my quotes checks the stocks you are looking for, calculate the gain according to your purchase price and display the result in differents formats.
 
+## Installation
+
+With node.js installed, type:
+
+    npm install track-my-quotes -g
+
 ## How to use it?
 
 Output results as a list:
@@ -32,7 +38,17 @@ Output results as CSV in a file:
 
     track-my-quotes my-stocks.csv -f csv -o today.csv
 
+(for now, output file and format are not implemented... it is still a 0.x version...)
+
+Serve results as a Web page:
+
+    track-my-quotes my-stocks.csv serve
+
+This command opens automatically the page in your favorite browser (`http://localhost:8444`).
+
 ## Stock list format
+
+Example of `my-stocks.csv`:
 
 ```
 symbol,purchase date,purchase price,quantity,purchase fees,sale fees
@@ -85,12 +101,9 @@ Range since 52 weeks: 140.56-189.5
 ## Todo
 
 - The `logger` library should be a module
-- `tracker` should be a module taking two params: options (as object) and callback
 - purchase date and price should be optional (in result, gain.*, fees.*, purchase.* and variations.sincePurchase should be null)
+- in the track module: merge input stocks with a default values object
 - Output as HTML, with templates
 - Output as CSV
 - Send output as mail: https://www.npmjs.com/package/nodemailer
-- configuration: money unit
 - gain per year (or day?)
-- option to sort output by variation since purchase date
-- add dividends since purchase

@@ -1,0 +1,138 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Track my stocks</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/main.css">
+	</head>
+	<body id="app">
+
+
+
+
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Track my stocks</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="navbar-collapse-1">
+
+					<p class="navbar-text"><template v-if="httpLoading">Loading...</template></p>
+
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sort by... <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Purchase date</a></li>
+								<li><a href="#">Variation since purchase</a></li>
+								<li><a href="#">Name</a></li>
+							</ul>
+
+						</li>
+						<li><button class="btn navbar-btn btn-link" v-on="click: refresh()">Refresh</button></li>
+					</ul>
+					<form class="navbar-form navbar-left navbar-right" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Search" v-model="searchText">
+						</div>
+					</form>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+
+
+
+
+
+		<div class="container">
+
+			<div v-repeat="stocks | filterBy searchText in 'name'">
+				<h2>{{name}} <small>{{symbol}}</small></h2>
+
+				<div class="row first-data">
+					<div class="col-md-4">
+						Last ({{day.date}})<br>
+						<strong>{{last.price}}</strong>
+					</div>
+					<div class="col-md-4">
+						Purchase ({{(new Date(purchase.date)).toLocaleDateString()}})<br>
+						<strong>{{purchase.price}}</strong>
+					</div>
+					<div class="col-md-4">
+						Variation<br>
+						<strong class="{{variations.sincePurchase > 0 ? 'positive' : 'negative'}}">{{variations.sincePurchase.toFixed(3)}}%</strong>
+					</div>
+
+				</div>
+
+				<h4>Profits</h4>
+				<div class="row statistics">
+					<div class="col-md-4">
+						Gain with fees<br>
+						<strong class="{{gain.withFees > 0 ? 'positive' : 'negative'}}">{{gain.withFees.toFixed(3)}}</strong>
+					</div>
+					<div class="col-md-4">
+						Quantity<br>
+						<strong>{{purchase.quantity}}</strong>
+					</div>
+					<div class="col-md-4">
+						Dividends<br>
+						<strong class="{{dividends.earned > 0 ? 'positive' : ''}}">{{dividends.earned}}</strong>
+					</div>
+				</div>
+
+				<h4>Statistics</h4>
+				<div class="row statistics">
+					<div class="col-md-2">
+						Day range<br>
+						<strong>{{day.low}} - {{day.high}}</strong>
+					</div>
+					<div class="col-md-2">
+						Previous day close<br>
+						<strong>{{last.close}}</strong>
+					</div>
+					<div class="col-md-2">
+						Previous day range<br>
+						<strong>{{last.low}} - {{last.high}}</strong>
+					</div>
+					<div class="col-md-2">
+						52 weeks range<br>
+						<strong>{{fiftyTwoWeeks.low}} - {{fiftyTwoWeeks.high}}</strong>
+					</div>
+					<div class="col-md-2">
+						Last dividends
+						<template v-if="dividends.date">
+							({{(new Date(dividends.date).toLocaleDateString())}})
+						</template>
+						<br>
+						<strong>{{dividends.last}}</strong>
+					</div>
+					<div class="col-md-2">
+						Previous day variation<br>
+						<strong class="{{variations.sincePreviousDay > 0 ? 'positive' : 'negative'}}">{{variations.sincePreviousDay.toFixed(3)}}%</strong>
+					</div>
+
+				</div>
+
+
+
+			</div>
+
+			<!-- {{stocks | json}} -->
+		</div>
+
+		<script src="vendor/vue.min.js"></script>
+		<script src="vendor/vue-resource.min.js"></script>
+		<script src="vendor/vue-strap.min.js"></script>
+		<script src="js/controller.js"></script>
+	</body>
+</html>
