@@ -43,31 +43,41 @@ IBM,15/03/2015,143.21,800,2,2
 ## Output example
 
 ```
+Apple Inc.
 Symbol: AAPL
 Purchase date: 2015-04-14
 Purchase price: 108.210
 Quantity: 1000
-Last price: 110.780 (2015-10-07)
-        (Open: 111.740, Close: 110.780, High: 111.770, Low: 109.410, Volume: 46602600)
-Gain: 2569.999
-Gain without fees: 2565.999
-Variation since purchase: 2.375
-Variation since 1 day: -0.476
-Variation since 5 days: 0.435
-Variation since 30 days: -1.362
--------------------------------------------------------------------------------
+Last price: 110.780 (2015-10-08)
+        (Open: 110.190, High: 110.190, Low: 108.210, Volume: 61698500)
+Current price: 109.500 (4:00pm)
+        (Open: 110.140, High: 110.190, Low: 108.210, Volume: 61980244)
+Gain: 2570.000
+Gain without fees: 2566.000
+Dividends: 1040.000
+Variation since purchase: 1.192%
+Variation since 1 day: 0.000%
+Variation since 5 days: 1.095%
+Variation since 30 days: 0.572%
+Range since 52 weeks: 92-134.54
+--------------------------------------------------------------------------------
+International Business Machines
 Symbol: IBM
 Purchase date: 2015-03-15
 Purchase price: 143.210
 Quantity: 800
-Last price: 150.090 (2015-10-07)
-	(Open: 150.040, Close: 150.090, High: 150.730, Low: 148.860, Volume: 2980800)
-Gain: 5503.997
-Gain without fees: 5499.997
-Variation since purchase: 4.804
-Variation since 1 day: 0.880
-Variation since 5 days: 3.532
-Variation since 30 days: 1.943
+Last price: 150.090 (2015-10-08)
+        (Open: 149.690, High: 153.020, Low: 149.290, Volume: 4777100)
+Current price: 152.280 (4:02pm)
+        (Open: 149.690, High: 153.020, Low: 149.290, Volume: 4794357)
+Gain: 5504.000
+Gain without fees: 5500.000
+Dividends: 2080.000
+Variation since purchase: 6.333%
+Variation since 1 day: 0.000%
+Variation since 5 days: 4.527%
+Variation since 30 days: 3.475%
+Range since 52 weeks: 140.56-189.5
 ```
 
 (it's prettier with colors)
@@ -76,7 +86,7 @@ Variation since 30 days: 1.943
 
 - The `logger` library should be a module
 - `tracker` should be a module taking two params: options (as object) and callback
-- purchase date and price should be optional
+- purchase date and price should be optional (in result, gain.*, fees.*, purchase.* and variations.sincePurchase should be null)
 - Output as HTML, with templates
 - Output as CSV
 - Send output as mail: https://www.npmjs.com/package/nodemailer

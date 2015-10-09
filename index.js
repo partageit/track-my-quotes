@@ -3,6 +3,10 @@
 var pkg = require('./package');
 var logger = require('./lib/logger');
 
+var track = require('./lib/track');
+var readCsv = require('./lib/read-csv');
+var output = require('./lib/output');
+
 var yargs = require('yargs')
 .usage(pkg.name + ' [options] <command>')  // pkg.name may be replaced with '$0'
 .example(pkg.name + ' my-stocks.csv', 'Output results')
@@ -39,7 +43,19 @@ if (argv.version) {
 } else if (argv.h) {
 	console.log(yargs.help());
 } else if (argv._[0]) {
-	require('./lib/track')(argv);
+	readCsv(
+		argv._[0],
+		function (stocks) {
+			track(
+				stocks,
+				function (data) {
+					output(data, argv.f, argv.o);
+				}
+			);
+		}
+	);
+
+
 } else {
 	console.log(yargs.help());
 }
