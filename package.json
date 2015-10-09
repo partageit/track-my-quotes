@@ -1,6 +1,6 @@
 {
 	"name": "track-my-quotes",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"description": "Track stocks values according to purchase price",
 	"main": "index.js",
 	"scripts": {

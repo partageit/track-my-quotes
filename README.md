@@ -107,3 +107,5 @@ Range since 52 weeks: 140.56-189.5
 - Output as CSV
 - Send output as mail: https://www.npmjs.com/package/nodemailer
 - gain per year (or day?)
+- The Web app sort by feature does not work
+- auto refresh Web app data?
