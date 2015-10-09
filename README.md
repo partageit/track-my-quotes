@@ -55,13 +55,13 @@ Variation since purchase: 2.375
 Variation since 1 day: -0.476
 Variation since 5 days: 0.435
 Variation since 30 days: -1.362
-----------------------------------
+-------------------------------------------------------------------------------
 Symbol: IBM
 Purchase date: 2015-03-15
 Purchase price: 143.210
 Quantity: 800
 Last price: 150.090 (2015-10-07)
-        (Open: 150.040, Close: 150.090, High: 150.730, Low: 148.860, Volume: 2980800)
+	(Open: 150.040, Close: 150.090, High: 150.730, Low: 148.860, Volume: 2980800)
 Gain: 5503.997
 Gain without fees: 5499.997
 Variation since purchase: 4.804
@@ -75,9 +75,12 @@ Variation since 30 days: 1.943
 ## Todo
 
 - The `logger` library should be a module
+- `tracker` should be a module taking two params: options (as object) and callback
+- purchase date and price should be optional
 - Output as HTML, with templates
 - Output as CSV
-- Send output as mail
+- Send output as mail: https://www.npmjs.com/package/nodemailer
 - configuration: money unit
 - gain per year (or day?)
 - option to sort output by variation since purchase date
+- add dividends since purchase
