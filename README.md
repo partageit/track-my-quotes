@@ -109,3 +109,4 @@ Range since 52 weeks: 140.56-189.5
 - gain per year (or day?)
 - The Web app sort by feature does not work
 - auto refresh Web app data?
+- add indices (CAC, ...) quotes?

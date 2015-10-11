@@ -47,6 +47,11 @@ background-color: #ecf0f1;
 	border-left: 0;
 }
 
+.title {
+	border-left: 1px solid #bdc3c7;
+	border-right: 1px solid #bdc3c7;
+}
+
 .negative {
 	color: red;
 }
