@@ -6,8 +6,7 @@ body {
 h2 {
 	background: -webkit-linear-gradient(left, #bdc3c7, white);
 	background: linear-gradient(to right, #bdc3c7, white);
-	margin: 4rem 0 3rem -90px;
-	padding: 1rem 1rem 1rem 90px;
+	padding: 1rem;
 }
 
 .first-data {

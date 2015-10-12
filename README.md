@@ -110,3 +110,4 @@ Range since 52 weeks: 140.56-189.5
 - The Web app sort by feature does not work
 - auto refresh Web app data?
 - add indices (CAC, ...) quotes?
+- Web app: simulation case, i.e. allow to change the current price to simulate gains (cancelled after)

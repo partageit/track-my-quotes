@@ -21,6 +21,27 @@ new Vue({
 	},
 	methods: {
 		refresh: refresh,
+		percent: function(a, b) {
+			return ((a / b) * 100) - 100;
+		},
+		enableSimulation(stock) {
+			if (!stock.backupDayPrice) {
+				stock.backupDayPrice = stock.day.price;
+			}
+			stock.$set('simulate', true);
+			console.log(this);
+			this.toggleDetail(stock, true);
+		},
+		disableSimulation(stock) {
+			stock.day.price = stock.backupDayPrice;
+			stock.$set('simulate', false);
+		},
+		toggleDetail(stock, show) {
+			if (show === undefined) {
+				show = !stock.showDetail;
+			}
+			stock.$set('showDetail', show);
+		}
 	},
 	ready: refresh
 });

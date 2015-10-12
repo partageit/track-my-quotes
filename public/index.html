@@ -1,14 +1,11 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Track my stocks</title>
+		<title>Track my quotes</title>
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/main.css">
 	</head>
 	<body id="app">
-
-
-
 
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="container-fluid">
@@ -20,7 +17,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">Track my stocks</a>
+					<a class="navbar-brand" href="#">Track my quotes</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
@@ -55,80 +52,95 @@
 
 		<div class="container">
 
-			<div v-repeat="stocks | filterBy searchText in 'name'">
-				<h2>{{name}} <small>{{symbol}}</small></h2>
+			<div v-repeat="stock in stocks | filterBy searchText in 'name'">
+
+				<div class="row">
+					<div class="col-md-12">
+						<h2 v-on="click: toggleDetail(stock)">
+							{{stock.name}} <small>{{stock.symbol}}</small>
+							<span class="caret pull-right"></span>
+						</h2>
+					</div>
+				</div>
 
 				<div class="row first-data">
 					<div class="col-md-4">
-						Last ({{day.date}})<br>
-						<strong>{{last.price}}</strong>
+						Last ({{stock.day.date}})<br>
+						<span v-show="!stock.simulate">
+							<strong v-on="click: enableSimulation(stock)">{{stock.day.price}}</strong>
+							<button class="btn btn-sm" v-on="click: enableSimulation(stock)">Simulate</button>
+						</span>
+						<span v-show="stock.simulate" class="form-inline">
+							<input type="text" class="form-control input-sm" v-model="stock.day.price">
+							<button class="btn btn-sm" v-on="click: disableSimulation(stock)">Restore</button>
+						</span>
 					</div>
 					<div class="col-md-4">
-						Purchase ({{(new Date(purchase.date)).toLocaleDateString()}})<br>
-						<strong>{{purchase.price}}</strong>
+						Purchase ({{(new Date(stock.purchase.date)).toLocaleDateString()}})<br>
+						<strong>{{stock.purchase.price}}</strong>
 					</div>
 					<div class="col-md-4">
 						Variation<br>
-						<strong class="{{variations.sincePurchase > 0 ? 'positive' : 'negative'}}">{{variations.sincePurchase.toFixed(3)}}%</strong>
+						<strong class="{{percent(stock.day.price, stock.purchase.price) > 0 ? 'positive' : 'negative'}}">{{percent(stock.day.price, stock.purchase.price).toFixed(3)}}%</strong>
 					</div>
 
 				</div>
 
-				<div class="row title">
+				<div class="row title" v-show="stock.showDetail">
 					<div class="col-md-12">
 						<h4>Profits</h4>
 					</div>
 				</div>
 
-				<div class="row statistics">
+				<div class="row statistics" v-show="stock.showDetail">
 					<div class="col-md-4">
 						Gain with fees<br>
-						<strong class="{{gain.withFees > 0 ? 'positive' : 'negative'}}">{{gain.withFees.toFixed(3)}}</strong>
+						<strong class="{{(stock.day.price - stock.purchase.price) * stock.purchase.quantity > 0 ? 'positive' : 'negative'}}">{{((stock.day.price - stock.purchase.price) * stock.purchase.quantity).toFixed(3)}}</strong>
 					</div>
 					<div class="col-md-4">
 						Quantity<br>
-						<strong>{{purchase.quantity}}</strong>
+						<strong>{{stock.purchase.quantity}}</strong>
 					</div>
 					<div class="col-md-4">
 						Dividends<br>
-						<strong class="{{dividends.earned > 0 ? 'positive' : ''}}">{{dividends.earned}}</strong>
+						<strong class="{{stock.dividends.earned > 0 ? 'positive' : ''}}">{{stock.dividends.earned}}</strong>
 					</div>
 				</div>
 
-				<div class="row title">
+				<div class="row title" v-show="stock.showDetail">
 					<div class="col-md-12">
 						<h4>Statistics</h4>
 					</div>
 				</div>
 
-				<div class="row statistics">
+				<div class="row statistics" v-show="stock.showDetail">
 					<div class="col-md-2">
 						Day range<br>
-						<strong>{{day.low.toFixed(3)}} - {{day.high.toFixed(3)}}</strong>
+						<strong>{{stock.day.low.toFixed(3)}} - {{stock.day.high.toFixed(3)}}</strong>
 					</div>
 					<div class="col-md-2">
 						Previous day close<br>
-						<strong>{{last.close.toFixed(3)}}</strong>
+						<strong>{{stock.last.close.toFixed(3)}}</strong>
 					</div>
 					<div class="col-md-2">
 						Previous day range<br>
-						<strong>{{last.low.toFixed(3)}} - {{last.high.toFixed(3)}}</strong>
+						<strong>{{stock.last.low.toFixed(3)}} - {{stock.last.high.toFixed(3)}}</strong>
 					</div>
 					<div class="col-md-2">
 						52 weeks range<br>
-						<strong>{{fiftyTwoWeeks.low.toFixed(3)}} - {{fiftyTwoWeeks.high.toFixed(3)}}</strong>
+						<strong>{{stock.fiftyTwoWeeks.low.toFixed(3)}} - {{stock.fiftyTwoWeeks.high.toFixed(3)}}</strong>
 					</div>
 					<div class="col-md-2">
 						Last dividends
 						<template v-if="dividends.date">
-							({{(new Date(dividends.date).toLocaleDateString())}})
+							({{(new Date(stock.dividends.date).toLocaleDateString())}})
 						</template>
 						<br>
-						<strong>{{dividends.last}}</strong>
+						<strong>{{stock.dividends.last}}</strong>
 					</div>
 					<div class="col-md-2">
 						Previous day variation<br>
-						<strong class="{{variations.sincePreviousDay > 0 ? 'positive' : 'negative'}}">{{variations.sincePreviousDay.toFixed(3)}}%</strong>
+						<strong class="{{stock.variations.sincePreviousDay > 0 ? 'positive' : 'negative'}}">{{stock.variations.sincePreviousDay.toFixed(3)}}%</strong>
 					</div>
 
 				</div>
