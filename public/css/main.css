@@ -7,18 +7,22 @@ h2 {
 	background: -webkit-linear-gradient(left, #bdc3c7, white);
 	background: linear-gradient(to right, #bdc3c7, white);
 	padding: 1rem;
-}
-
-.first-data {
-background-color: #ecf0f1;
-}
-
-.first-data, .statistics {
-	border: 1px solid #bdc3c7;
 	border-radius: 3px;
 }
 
-.first-data > div, .statistics > div {
+.highlight {
+	background-color: #ecf0f1;
+}
+
+.data {
+	border: 1px solid #bdc3c7;
+}
+
+.data + .data {
+	border-top: 0;
+}
+
+.data > div {
 	height: 70px;
 	border-left: 1px solid #bdc3c7;
 	text-align: center;
@@ -42,7 +46,7 @@ background-color: #ecf0f1;
 	resize: vertical;
 }
 
-.first-data > div:first-child, .statistics > div:first-child {
+.data > div:first-child {
 	border-left: 0;
 }
 

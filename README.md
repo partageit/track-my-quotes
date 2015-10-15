@@ -101,13 +101,11 @@ Range since 52 weeks: 140.56-189.5
 ## Todo
 
 - The `logger` library should be a module
-- purchase date and price should be optional (in result, gain.*, fees.*, purchase.* and variations.sincePurchase should be null)
 - in the track module: merge input stocks with a default values object
 - Output as HTML, with templates
 - Output as CSV
 - Send output as mail: https://www.npmjs.com/package/nodemailer
 - gain per year (or day?)
-- The Web app sort by feature does not work
 - auto refresh Web app data?
 - add indices (CAC, ...) quotes?
-- Web app: simulation case, i.e. allow to change the current price to simulate gains (cancelled after)
+- save locally favorite order

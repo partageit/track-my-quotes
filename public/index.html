@@ -29,13 +29,16 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sort by... <span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Purchase date</a></li>
-								<li><a href="#">Variation since purchase</a></li>
-								<li><a href="#">Name</a></li>
+								<li v-repeat="orderFilter in orderFilters">
+									<a href="#" v-on="click: changeOrder(orderFilter)">
+										{{orderFilter.label}}
+										<span class="glyphicon glyphicon-ok" v-show="sortField === orderFilter.field"></span>
+									</a>
+								</li>
 							</ul>
 
 						</li>
-						<li><button class="btn navbar-btn btn-link" v-on="click: refresh()">Refresh</button></li>
+						<li><button class="btn navbar-btn btn-link" v-on="click: refresh()"><span class="glyphicon glyphicon-refresh"></span></button></li>
 					</ul>
 					<form class="navbar-form navbar-left navbar-right" role="search">
 						<div class="form-group">
@@ -47,12 +50,9 @@
 		</nav>
 
 
-
-
-
 		<div class="container">
 
-			<div v-repeat="stock in stocks | filterBy searchText in 'name'">
+			<div v-repeat="stock in stocks | filterBy searchText in 'name' | orderBy sortField sortOrder">
 
 				<div class="row">
 					<div class="col-md-12">
@@ -63,16 +63,17 @@
 					</div>
 				</div>
 
-				<div class="row first-data">
+				<!-- Purchased version -->
+				<div class="row data highlight" v-show="stock.purchase.date">
 					<div class="col-md-4">
 						Last ({{stock.day.date}})<br>
 						<span v-show="!stock.simulate">
 							<strong v-on="click: enableSimulation(stock)">{{stock.day.price}}</strong>
-							<button class="btn btn-sm" v-on="click: enableSimulation(stock)">Simulate</button>
+							<button class="btn btn-sm" v-on="click: enableSimulation(stock)"><span class="glyphicon glyphicon-pencil"></span></button>
 						</span>
 						<span v-show="stock.simulate" class="form-inline">
 							<input type="text" class="form-control input-sm" v-model="stock.day.price">
-							<button class="btn btn-sm" v-on="click: disableSimulation(stock)">Restore</button>
+							<button class="btn btn-sm" v-on="click: disableSimulation(stock)"><span class="glyphicon glyphicon-repeat"></span></button>
 						</span>
 					</div>
 					<div class="col-md-4">
@@ -86,22 +87,47 @@
 
 				</div>
 
-				<div class="row title" v-show="stock.showDetail">
+				<!-- Not purchased version -->
+				<div class="row data highlight" v-show="!stock.purchase.date">
+					<div class="col-md-3">
+						Last ({{stock.day.date}})<br>
+						<strong>{{stock.day.price}}</strong>
+					</div>
+					<div class="col-md-3">
+						Day open<br>
+						<strong>{{stock.day.open.toFixed(3)}}</strong>
+					</div>
+					<div class="col-md-3">
+						Day variation<br>
+						<strong class="{{stock.variations.sinceOpen > 0 ? 'positive' : 'negative'}}">{{stock.variations.sinceOpen.toFixed(3)}}%</strong>
+					</div>
+					<div class="col-md-3">
+						Day range<br>
+						<strong>{{stock.day.low.toFixed(3)}} - {{stock.day.high.toFixed(3)}}</strong>
+					</div>
+				</div>
+
+
+				<div class="row title" v-show="stock.showDetail && stock.purchase.date">
 					<div class="col-md-12">
 						<h4>Profits</h4>
 					</div>
 				</div>
 
-				<div class="row statistics" v-show="stock.showDetail">
-					<div class="col-md-4">
+				<div class="row data" v-show="stock.showDetail && stock.purchase.date">
+					<div class="col-md-3 highlight">
 						Gain with fees<br>
 						<strong class="{{(stock.day.price - stock.purchase.price) * stock.purchase.quantity > 0 ? 'positive' : 'negative'}}">{{((stock.day.price - stock.purchase.price) * stock.purchase.quantity).toFixed(3)}}</strong>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3 highlight">
+						Variation with fees<br>
+						<strong class="{{percent(stock.day.price - ((stock.fees.purchase + stock.fees.sale) / stock.purchase.quantity), stock.purchase.price) > 0 ? 'positive' : 'negative'}}">{{percent(stock.day.price - ((stock.fees.purchase + stock.fees.sale) / stock.purchase.quantity), stock.purchase.price).toFixed(3)}}%</strong>
+					</div>
+					<div class="col-md-3">
 						Quantity<br>
 						<strong>{{stock.purchase.quantity}}</strong>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						Dividends<br>
 						<strong class="{{stock.dividends.earned > 0 ? 'positive' : ''}}">{{stock.dividends.earned}}</strong>
 					</div>
@@ -113,39 +139,47 @@
 					</div>
 				</div>
 
-				<div class="row statistics" v-show="stock.showDetail">
-					<div class="col-md-2">
+				<div class="row data" v-show="stock.showDetail">
+					<div class="col-md-3">
+						Day open<br>
+						<strong>{{stock.day.open.toFixed(3)}}</strong>
+					</div>
+					<div class="col-md-3">
+						Day variation<br>
+						<strong class="{{percent(stock.day.price, stock.day.open) > 0 ? 'positive' : 'negative'}}">{{percent(stock.day.price, stock.day.open).toFixed(3)}}%</strong>
+					</div>
+					<div class="col-md-3">
 						Day range<br>
 						<strong>{{stock.day.low.toFixed(3)}} - {{stock.day.high.toFixed(3)}}</strong>
 					</div>
-					<div class="col-md-2">
-						Previous day close<br>
-						<strong>{{stock.last.close.toFixed(3)}}</strong>
-					</div>
-					<div class="col-md-2">
-						Previous day range<br>
-						<strong>{{stock.last.low.toFixed(3)}} - {{stock.last.high.toFixed(3)}}</strong>
-					</div>
-					<div class="col-md-2">
+					<div class="col-md-3">
 						52 weeks range<br>
 						<strong>{{stock.fiftyTwoWeeks.low.toFixed(3)}} - {{stock.fiftyTwoWeeks.high.toFixed(3)}}</strong>
 					</div>
-					<div class="col-md-2">
+
+				</div>
+				<div class="row data" v-show="stock.showDetail">
+					<div class="col-md-3">
+						Previous day close<br>
+						<strong>{{stock.last.close.toFixed(3)}}</strong>
+					</div>
+					<div class="col-md-3">
+						Previous day variation<br>
+						<strong class="{{stock.variations.sincePreviousDay > 0 ? 'positive' : 'negative'}}">{{stock.variations.sincePreviousDay.toFixed(3)}}%</strong>
+					</div>
+					<div class="col-md-3">
+						Previous day range<br>
+						<strong>{{stock.last.low.toFixed(3)}} - {{stock.last.high.toFixed(3)}}</strong>
+					</div>
+					<div class="col-md-3">
 						Last dividends
-						<template v-if="dividends.date">
+						<template v-if="stock.dividends.date">
 							({{(new Date(stock.dividends.date).toLocaleDateString())}})
 						</template>
 						<br>
 						<strong>{{stock.dividends.last}}</strong>
 					</div>
-					<div class="col-md-2">
-						Previous day variation<br>
-						<strong class="{{stock.variations.sincePreviousDay > 0 ? 'positive' : 'negative'}}">{{stock.variations.sincePreviousDay.toFixed(3)}}%</strong>
-					</div>
-
 				</div>
-
-
 
 			</div>
 
@@ -154,7 +188,8 @@
 
 		<script src="vendor/vue.min.js"></script>
 		<script src="vendor/vue-resource.min.js"></script>
-		<script src="vendor/vue-strap.min.js"></script>
+		<script src="vendor/jquery.min.js"></script>
+		<script src="vendor/bootstrap.min.js"></script>
 		<script src="js/controller.js"></script>
 	</body>
 </html>

@@ -17,30 +17,40 @@ new Vue({
 	el: '#app',
 	data: {
 		stocks: [],
-		httpLoading: false
+		httpLoading: false,
+		sortField: 'purchase.date',
+		sortOrder: '',
+		orderFilters: [
+			{label: 'Purchase date', field: 'purchase.date', order: ''},
+			{label: 'Variation since purchase', field: 'variations.sincePurchase', order: 'reverse'},
+			{label: 'Name', field: 'name', order: ''}
+		]
 	},
 	methods: {
 		refresh: refresh,
 		percent: function(a, b) {
 			return ((a / b) * 100) - 100;
 		},
-		enableSimulation(stock) {
+		enableSimulation: function(stock) {
 			if (!stock.backupDayPrice) {
 				stock.backupDayPrice = stock.day.price;
 			}
 			stock.$set('simulate', true);
-			console.log(this);
 			this.toggleDetail(stock, true);
 		},
-		disableSimulation(stock) {
+		disableSimulation: function(stock) {
 			stock.day.price = stock.backupDayPrice;
 			stock.$set('simulate', false);
 		},
-		toggleDetail(stock, show) {
+		toggleDetail: function(stock, show) {
 			if (show === undefined) {
 				show = !stock.showDetail;
 			}
 			stock.$set('showDetail', show);
+		},
+		changeOrder: function(orderFilter) {
+			this.$set('sortField', orderFilter.field);
+			this.$set('sortOrder', orderFilter.order);
 		}
 	},
 	ready: refresh
